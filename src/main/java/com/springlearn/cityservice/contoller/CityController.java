@@ -34,10 +34,7 @@ public class CityController {
 
     @GetMapping("/{id}")
     public ResponseEntity<City> getCity(@PathVariable String id){ //both has "id" keyword.
-        City resultCity = cities.stream()  //for each le de yapılabilirdi.
-                .filter(city -> city.getId().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("City could not be found"));
+        City resultCity = getCityById(id);
         return  new ResponseEntity<City>(resultCity, HttpStatus.OK);
     }
 
@@ -46,5 +43,29 @@ public class CityController {
         newCity.setCreateDate(new Date());
         cities.add(newCity);
         return new ResponseEntity<>(newCity,HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> putCity(@PathVariable String id, @RequestBody City newCity){
+        City oldCity = getCityById(id);
+        oldCity.setName(newCity.getName());
+        oldCity.setCreateDate(new Date());
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCity(@PathVariable String id){
+        City city = getCityById(id);
+        cities.remove(city);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private City getCityById(String id) {
+        return cities.stream()  //for each le de yapılabilirdi.
+                .filter(city -> city.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("City could not be found"));
     }
 }
