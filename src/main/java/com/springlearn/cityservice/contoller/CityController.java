@@ -21,7 +21,11 @@ public class CityController {
 
     @GetMapping
     public ResponseEntity<List<City>> getCities(){
-        return  new ResponseEntity<>(cityService.getCities(), HttpStatus.OK);
+         List<City> cities  = new ArrayList<City>();
+         cities.add(new City(new Date(), "35", "izmir"));
+        cities.add(new City(new Date(), "34", "istanbul"));
+
+        return  new ResponseEntity<>(cities, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
